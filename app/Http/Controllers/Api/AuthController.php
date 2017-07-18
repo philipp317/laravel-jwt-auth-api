@@ -34,19 +34,22 @@ class AuthController extends Controller
                 'facebook' => $request->get('facebook')
             ]);            
         } else if ($request->get('google') == "default") {
-            if($request->get("email")) {
-                $newUser = $this->user->create([
-                    'name' => $request->get('name'),
-                    'email' => $request->get('email'),
-                    'google' => $request->get('google'),
-                    'facebook' => $request->get('facebook')
-                ]); 
-            } else {
-                $newUser = $this->user->create([
-                    'name' => $request->get('name'),
-                    'google' => $request->get('google'),
-                    'facebook' => $request->get('facebook')
-                ]);
+            $user = User::where('facebook', $request->input('facebook'))->first();
+            if(!$user){
+                if($request->get("email")) {
+                    $newUser = $this->user->create([
+                        'name' => $request->get('name'),
+                        'email' => $request->get('email'),
+                        'google' => $request->get('google'),
+                        'facebook' => $request->get('facebook')
+                    ]); 
+                } else {
+                    $newUser = $this->user->create([
+                        'name' => $request->get('name'),
+                        'google' => $request->get('google'),
+                        'facebook' => $request->get('facebook')
+                    ]);
+                }
             }
         } else if ($request->get('phone')) {
             $newUser = $this->user->create([
